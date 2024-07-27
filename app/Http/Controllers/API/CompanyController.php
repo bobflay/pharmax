@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Http\Requests\CompanyRequest;
 
 class CompanyController extends Controller
 {
@@ -20,7 +21,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CompanyRequest $request)
     {
         $new_company = Company::create($request->all());
         return response()->json([

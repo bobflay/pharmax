@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\RegistrationRequest;
 use Auth;
 class AuthController extends Controller
 {
@@ -39,31 +40,22 @@ class AuthController extends Controller
     }
 
 
-    public function register(Request $request)
+    public function register(RegistrationRequest $request)
     {
-        $user = User::where('email',$request->email)->first();
-        if(is_null($user))
-        {
-            $user = new User();
-            $user->name = $request->get('name');
-            $user->email = $request->get('email');
-            $user->password = bcrypt($request->password);
-            $user->save();
 
-            $token = $user->createToken('authtoken')->plainTextToken;
+        $user = new User();
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = bcrypt($request->password);
+        $user->save();
 
-            return response()->json([
-                'status'=>true,
-                'message'=>'User Created Successfully',
-                'token'=>$token,
-                'data'=>$user
-            ]);
+        $token = $user->createToken('authtoken')->plainTextToken;
 
-        }else{
-            return response()->json([
-                'status'=>false,
-                'message'=>"User Already Exists"
-            ]);
-        }
+        return response()->json([
+            'status'=>true,
+            'message'=>'User Created Successfully',
+            'token'=>$token,
+            'data'=>$user
+        ]);
     }
 }
